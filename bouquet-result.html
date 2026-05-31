@@ -39,8 +39,15 @@
   </main>
   <script>
     const params = new URLSearchParams(window.location.search);
+    if (window.location.hostname === "www.digitalbouquet.top") {
+      window.location.replace(`https://digitalbouquet.top${window.location.pathname}${window.location.search}`);
+    }
     const flowerNames = { rose:"Rose", orchid:"Orchid", tulip:"Tulip", peony:"Peony", lily:"Lily", sunflower:"Sunflower", daisy:"Daisy", carnation:"Carnation", hydrangea:"Hydrangea", lavender:"Lavender", iris:"Iris", daffodil:"Daffodil", cherry:"Cherry Blossom", chrysanthemum:"Chrysanthemum", magnolia:"Magnolia", camellia:"Camellia", gardenia:"Gardenia", ranunculus:"Ranunculus", anemone:"Anemone", marigold:"Marigold" };
-    const selectedFlowers = (params.get("flowers") || "rose,orchid,tulip").split(",").filter(Boolean);
+    const defaultMessage = "Wishing you a day filled with warmth, beauty, and small moments that make you smile.";
+    const occasionCodes = { b:"Birthday", a:"Anniversary", t:"Thank You", g:"Get Well", s:"Sympathy", c:"Congratulations", m:"Mother's Day", v:"Valentine's Day" };
+    const flowerCodes = { r:"rose", o:"orchid", t:"tulip", p:"peony", l:"lily", s:"sunflower", d:"daisy", c:"carnation", h:"hydrangea", v:"lavender", i:"iris", n:"daffodil", b:"cherry", y:"chrysanthemum", m:"magnolia", a:"camellia", g:"gardenia", u:"ranunculus", e:"anemone", z:"marigold" };
+    const rawFlowers = params.get("f") || params.get("flowers") || "r,o,t";
+    const selectedFlowers = rawFlowers.includes(",") ? rawFlowers.split(",").filter(Boolean) : [...rawFlowers].map((code) => flowerCodes[code] || code);
     const flowers = selectedFlowers.length < 12 ? Array.from({ length: 12 }, (_, index) => selectedFlowers[index % selectedFlowers.length]) : selectedFlowers;
     const bouquet = document.getElementById("realBouquet");
     bouquet.classList.toggle("dense", selectedFlowers.length > 14);
@@ -69,13 +76,15 @@
       item.title = flowerNames[flower] || flower;
       bouquet.appendChild(item);
     });
-    document.getElementById("previewOccasion").textContent = params.get("occasion") || "Birthday";
-    document.getElementById("previewTitle").textContent = `Dear ${params.get("recipient") || "someone special"}`;
-    const sender = params.get("sender");
+    const occasion = params.get("o") || params.get("occasion") || "Birthday";
+    document.getElementById("previewOccasion").textContent = occasionCodes[occasion] || occasion;
+    document.getElementById("previewTitle").textContent = `Dear ${params.get("r") || params.get("recipient") || "someone special"}`;
+    const sender = params.get("s") || params.get("sender");
     document.getElementById("previewSender").textContent = sender ? `From ${sender}` : "";
-    document.getElementById("previewMessage").textContent = params.get("message") || "A thoughtful greeting will appear here.";
+    document.getElementById("previewMessage").textContent = params.get("m") || params.get("message") || defaultMessage;
     document.getElementById("copyLink").addEventListener("click", async () => {
-      await navigator.clipboard.writeText(window.location.href);
+      const shareUrl = window.location.hostname === "www.digitalbouquet.top" ? window.location.href.replace("https://www.digitalbouquet.top", "https://digitalbouquet.top") : window.location.href;
+      await navigator.clipboard.writeText(shareUrl);
       document.getElementById("copyLink").textContent = "Copied";
     });
   </script>

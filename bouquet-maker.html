@@ -58,6 +58,9 @@
     const tabs = [...document.querySelectorAll(".step-tabs span")];
     const flowerInputs = [...document.querySelectorAll(".flower-picker input")];
     const names = { rose:"Rose", orchid:"Orchid", tulip:"Tulip", peony:"Peony", lily:"Lily", sunflower:"Sunflower", daisy:"Daisy", carnation:"Carnation", hydrangea:"Hydrangea", lavender:"Lavender", iris:"Iris", daffodil:"Daffodil", cherry:"Cherry Blossom", chrysanthemum:"Chrysanthemum", magnolia:"Magnolia", camellia:"Camellia", gardenia:"Gardenia", ranunculus:"Ranunculus", anemone:"Anemone", marigold:"Marigold" };
+    const defaultMessage = "Wishing you a day filled with warmth, beauty, and small moments that make you smile.";
+    const occasionCodes = { Birthday:"b", Anniversary:"a", "Thank You":"t", "Get Well":"g", Sympathy:"s", Congratulations:"c", "Mother's Day":"m", "Valentine's Day":"v" };
+    const flowerCodes = { rose:"r", orchid:"o", tulip:"t", peony:"p", lily:"l", sunflower:"s", daisy:"d", carnation:"c", hydrangea:"h", lavender:"v", iris:"i", daffodil:"n", cherry:"b", chrysanthemum:"y", magnolia:"m", camellia:"a", gardenia:"g", ranunculus:"u", anemone:"e", marigold:"z" };
     let step = 0;
     const selectedFlowers = () => flowerInputs.filter((input) => input.checked).map((input) => input.value);
     const scrollToActiveStep = () => {
@@ -83,17 +86,20 @@
     document.getElementById("completeButton").addEventListener("click", () => {
       const selected = selectedFlowers();
       if (selected.length < 3) return showStep(1);
-      const params = new URLSearchParams({
-        occasion: document.querySelector("input[name='occasion']:checked").value,
-        recipient: document.getElementById("recipient").value || "someone special",
-        sender: document.getElementById("sender").value || "",
-        message: document.getElementById("message").value || "Wishing you a day filled with warmth, beauty, and small moments that make you smile.",
-        flowers: selected.join(",")
-      });
+      const occasion = document.querySelector("input[name='occasion']:checked").value;
+      const recipient = document.getElementById("recipient").value || "someone special";
+      const sender = document.getElementById("sender").value.trim();
+      const message = document.getElementById("message").value.trim();
+      const params = new URLSearchParams();
+      params.set("o", occasionCodes[occasion] || occasion);
+      params.set("r", recipient);
+      if (sender) params.set("s", sender);
+      if (message && message !== defaultMessage) params.set("m", message);
+      params.set("f", selected.map((flower) => flowerCodes[flower] || flower).join(""));
       window.location.href = `bouquet-result.html?${params.toString()}`;
     });
     document.getElementById("templateButton").addEventListener("click", () => {
-      document.getElementById("message").value = "Wishing you a day filled with warmth, beauty, and small moments that make you smile.";
+      document.getElementById("message").value = defaultMessage;
       update();
     });
     document.querySelectorAll("input, textarea").forEach((field) => field.addEventListener("input", update));
