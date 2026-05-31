@@ -412,6 +412,12 @@ h3 {
   background-position: center;
 }
 
+.flower-card h2,
+.flower-card h3 {
+  font-size: 1.28rem;
+  line-height: 1.15;
+}
+
 .flower-grid.large {
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
