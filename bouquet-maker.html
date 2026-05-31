@@ -1,0 +1,106 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create a Free Digital Bouquet | Step-by-Step Maker</title>
+  <meta name="description" content="Create a free digital bouquet in four steps: choose an occasion, select flowers, write a greeting, and complete an animated virtual flower bouquet.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark rose-mark" aria-hidden="true"></span><span>digitalbouquet.top</span></a>
+    <nav><a href="index.html">Home</a><a href="flower-meanings.html">Flower Meanings</a><a href="occasions.html">Occasions</a><a href="create-guide.html">Create Guide</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+  </header>
+  <main>
+    <section class="page-hero maker-hero compact-hero">
+      <p class="eyebrow">Free digital bouquet maker</p>
+      <h1>Create a beautiful digital bouquet in four steps.</h1>
+      <p class="lead">Pick an occasion, choose flowers, write a note, and finish your bouquet.</p>
+    </section>
+    <section class="section maker-steps">
+      <div class="step-tabs" aria-label="Bouquet maker steps">
+        <span class="active">1 Occasion</span><span>2 Flowers</span><span>3 Message</span><span>4 Result</span>
+      </div>
+      <form class="maker-panel step-panel active" data-step="0">
+        <h2>Step 1. Choose an occasion</h2>
+        <div class="choice-grid">
+          <label><input name="occasion" type="radio" value="Birthday" checked> Birthday</label>
+          <label><input name="occasion" type="radio" value="Anniversary"> Anniversary</label>
+          <label><input name="occasion" type="radio" value="Thank You"> Thank You</label>
+          <label><input name="occasion" type="radio" value="Get Well"> Get Well</label>
+          <label><input name="occasion" type="radio" value="Sympathy"> Sympathy</label>
+          <label><input name="occasion" type="radio" value="Congratulations"> Congratulations</label>
+          <label><input name="occasion" type="radio" value="Mother's Day"> Mother's Day</label>
+          <label><input name="occasion" type="radio" value="Valentine's Day"> Valentine's Day</label>
+        </div>
+        <button class="button primary next" type="button">Next step</button>
+      </form>
+      <form class="maker-panel step-panel" data-step="1">
+        <h2>Step 2. Select at least three flowers</h2>
+        <div class="flower-picker many">
+          <label><input type="checkbox" value="rose" checked> Rose</label><label><input type="checkbox" value="orchid" checked> Orchid</label><label><input type="checkbox" value="tulip" checked> Tulip</label><label><input type="checkbox" value="peony"> Peony</label><label><input type="checkbox" value="lily"> Lily</label><label><input type="checkbox" value="sunflower"> Sunflower</label><label><input type="checkbox" value="daisy"> Daisy</label><label><input type="checkbox" value="carnation"> Carnation</label><label><input type="checkbox" value="hydrangea"> Hydrangea</label><label><input type="checkbox" value="lavender"> Lavender</label><label><input type="checkbox" value="iris"> Iris</label><label><input type="checkbox" value="daffodil"> Daffodil</label><label><input type="checkbox" value="cherry"> Cherry Blossom</label><label><input type="checkbox" value="chrysanthemum"> Chrysanthemum</label><label><input type="checkbox" value="magnolia"> Magnolia</label><label><input type="checkbox" value="camellia"> Camellia</label><label><input type="checkbox" value="gardenia"> Gardenia</label><label><input type="checkbox" value="ranunculus"> Ranunculus</label><label><input type="checkbox" value="anemone"> Anemone</label><label><input type="checkbox" value="marigold"> Marigold</label>
+        </div>
+        <p class="maker-note" id="makerNote">3 flowers selected. Ready for the next step.</p>
+        <div class="maker-actions"><button class="button secondary prev" type="button">Back</button><button class="button primary next" type="button" id="flowerNext">Next step</button></div>
+      </form>
+      <form class="maker-panel step-panel" data-step="2">
+        <h2>Step 3. Write a greeting</h2>
+        <label>Recipient name<input id="recipient" type="text" placeholder=""></label>
+        <label>Greeting message<textarea id="message" rows="5" placeholder="Wishing you a day filled with warmth, beauty, and small moments that make you smile."></textarea></label>
+        <label>From<input id="sender" type="text" placeholder=""></label>
+        <div class="maker-actions"><button class="button secondary prev" type="button">Back</button><button class="button secondary" type="button" id="templateButton">Use template</button><button class="button primary" type="button" id="completeButton">Complete bouquet</button></div>
+      </form>
+    </section>
+  </main>
+  <script>
+    const panels = [...document.querySelectorAll(".step-panel")];
+    const tabs = [...document.querySelectorAll(".step-tabs span")];
+    const flowerInputs = [...document.querySelectorAll(".flower-picker input")];
+    const names = { rose:"Rose", orchid:"Orchid", tulip:"Tulip", peony:"Peony", lily:"Lily", sunflower:"Sunflower", daisy:"Daisy", carnation:"Carnation", hydrangea:"Hydrangea", lavender:"Lavender", iris:"Iris", daffodil:"Daffodil", cherry:"Cherry Blossom", chrysanthemum:"Chrysanthemum", magnolia:"Magnolia", camellia:"Camellia", gardenia:"Gardenia", ranunculus:"Ranunculus", anemone:"Anemone", marigold:"Marigold" };
+    let step = 0;
+    const selectedFlowers = () => flowerInputs.filter((input) => input.checked).map((input) => input.value);
+    const scrollToActiveStep = () => {
+      const target = panels[step];
+      if (!target) return;
+      const top = target.getBoundingClientRect().top + window.pageYOffset - 82;
+      window.scrollTo({ top, behavior: "smooth" });
+    };
+    const showStep = (next) => {
+      step = Math.max(0, Math.min(3, next));
+      panels.forEach((panel, index) => panel.classList.toggle("active", index === step));
+      tabs.forEach((tab, index) => tab.classList.toggle("active", index === step));
+      update();
+      requestAnimationFrame(scrollToActiveStep);
+    };
+    const update = () => {
+      const selected = selectedFlowers();
+      document.getElementById("makerNote").textContent = selected.length < 3 ? "Please select at least 3 flowers to continue." : `${selected.length} flowers selected. Ready for the next step.`;
+      document.getElementById("flowerNext").disabled = selected.length < 3;
+    };
+    document.querySelectorAll(".next").forEach((button) => button.addEventListener("click", () => showStep(step + 1)));
+    document.querySelectorAll(".prev").forEach((button) => button.addEventListener("click", () => showStep(step - 1)));
+    document.getElementById("completeButton").addEventListener("click", () => {
+      const selected = selectedFlowers();
+      if (selected.length < 3) return showStep(1);
+      const params = new URLSearchParams({
+        occasion: document.querySelector("input[name='occasion']:checked").value,
+        recipient: document.getElementById("recipient").value || "someone special",
+        sender: document.getElementById("sender").value || "",
+        message: document.getElementById("message").value || "Wishing you a day filled with warmth, beauty, and small moments that make you smile.",
+        flowers: selected.join(",")
+      });
+      window.location.href = `bouquet-result.html?${params.toString()}`;
+    });
+    document.getElementById("templateButton").addEventListener("click", () => {
+      document.getElementById("message").value = "Wishing you a day filled with warmth, beauty, and small moments that make you smile.";
+      update();
+    });
+    document.querySelectorAll("input, textarea").forEach((field) => field.addEventListener("input", update));
+    document.querySelectorAll("input").forEach((field) => field.addEventListener("change", update));
+    update();
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,84 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Digital Bouquet Is Ready | digitalbouquet.top</title>
+  <meta name="description" content="View and share your completed digital bouquet with realistic virtual flowers and a personal greeting.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="result-page">
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark rose-mark" aria-hidden="true"></span><span>digitalbouquet.top</span></a>
+    <nav><a href="index.html">Home</a><a href="flower-meanings.html">Flower Meanings</a><a href="occasions.html">Occasions</a><a href="create-guide.html">Create Guide</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+  </header>
+  <main>
+    <section class="final-bouquet-stage">
+      <article class="final-card">
+        <div class="real-bouquet complete" id="realBouquet" aria-label="Completed realistic digital bouquet">
+          <div class="real-stems"></div>
+          <div class="real-wrap"></div>
+        </div>
+        <div class="final-message">
+          <p class="eyebrow" id="previewOccasion">Birthday</p>
+          <h1 id="previewTitle">For someone special</h1>
+          <p id="previewMessage">A thoughtful greeting will appear here.</p>
+          <p class="sender-line" id="previewSender"></p>
+        </div>
+      </article>
+      <aside class="floating-share">
+        <button class="share-copy" type="button" id="copyLink">Copy link</button>
+        <a class="social facebook" href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook">f</a>
+        <a class="social x" href="https://x.com/" target="_blank" rel="noopener" aria-label="X">X</a>
+        <a class="social instagram" href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+        <a class="social pinterest" href="https://www.pinterest.com/" target="_blank" rel="noopener" aria-label="Pinterest">P</a>
+        <a class="social reddit" href="https://www.reddit.com/" target="_blank" rel="noopener" aria-label="Reddit">R</a>
+        <a class="social whatsapp" href="https://www.whatsapp.com/" target="_blank" rel="noopener" aria-label="WhatsApp">W</a>
+      </aside>
+    </section>
+  </main>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const flowerNames = { rose:"Rose", orchid:"Orchid", tulip:"Tulip", peony:"Peony", lily:"Lily", sunflower:"Sunflower", daisy:"Daisy", carnation:"Carnation", hydrangea:"Hydrangea", lavender:"Lavender", iris:"Iris", daffodil:"Daffodil", cherry:"Cherry Blossom", chrysanthemum:"Chrysanthemum", magnolia:"Magnolia", camellia:"Camellia", gardenia:"Gardenia", ranunculus:"Ranunculus", anemone:"Anemone", marigold:"Marigold" };
+    const selectedFlowers = (params.get("flowers") || "rose,orchid,tulip").split(",").filter(Boolean);
+    const flowers = selectedFlowers.length < 12 ? Array.from({ length: 12 }, (_, index) => selectedFlowers[index % selectedFlowers.length]) : selectedFlowers;
+    const bouquet = document.getElementById("realBouquet");
+    bouquet.classList.toggle("dense", selectedFlowers.length > 14);
+    const slots = [
+      { x: -172, y: 118, s: .74, r: -24 }, { x: -118, y: 62, s: .88, r: -14 },
+      { x: -48, y: 34, s: 1.02, r: -6 }, { x: 28, y: 30, s: 1.06, r: 5 },
+      { x: 104, y: 60, s: .9, r: 13 }, { x: 166, y: 116, s: .74, r: 23 },
+      { x: -92, y: 120, s: .92, r: -9 }, { x: -16, y: 104, s: 1.02, r: 0 },
+      { x: 62, y: 120, s: .92, r: 9 }, { x: -142, y: 162, s: .68, r: -20 },
+      { x: -58, y: 164, s: .78, r: -8 }, { x: 36, y: 164, s: .78, r: 8 },
+      { x: 126, y: 162, s: .68, r: 20 }, { x: 0, y: 172, s: .72, r: 0 },
+      { x: -196, y: 76, s: .58, r: -28 }, { x: 196, y: 76, s: .58, r: 28 },
+      { x: -198, y: 168, s: .56, r: -30 }, { x: 198, y: 168, s: .56, r: 30 },
+      { x: -86, y: 22, s: .62, r: -12 }, { x: 86, y: 22, s: .62, r: 12 }
+    ];
+    flowers.forEach((flower, index) => {
+      const slot = slots[index % slots.length];
+      const item = document.createElement("span");
+      item.className = `real-flower ${flower}`;
+      item.style.setProperty("--i", index);
+      item.style.setProperty("--x", `${slot.x}px`);
+      item.style.setProperty("--y", `${slot.y}px`);
+      item.style.setProperty("--s", slot.s);
+      item.style.setProperty("--r", `${slot.r}deg`);
+      item.style.setProperty("--stem-r", `${slot.r * 0.45}deg`);
+      item.title = flowerNames[flower] || flower;
+      bouquet.appendChild(item);
+    });
+    document.getElementById("previewOccasion").textContent = params.get("occasion") || "Birthday";
+    document.getElementById("previewTitle").textContent = `Dear ${params.get("recipient") || "someone special"}`;
+    const sender = params.get("sender");
+    document.getElementById("previewSender").textContent = sender ? `From ${sender}` : "";
+    document.getElementById("previewMessage").textContent = params.get("message") || "A thoughtful greeting will appear here.";
+    document.getElementById("copyLink").addEventListener("click", async () => {
+      await navigator.clipboard.writeText(window.location.href);
+      document.getElementById("copyLink").textContent = "Copied";
+    });
+  </script>
+</body>
+</html>
+
