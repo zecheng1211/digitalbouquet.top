@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.digitalbouquet.top"
+        }
+      ],
+      "destination": "https://digitalbouquet.top/:path*",
+      "permanent": true
+    }
+  ]
+}
