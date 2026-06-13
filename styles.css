@@ -287,7 +287,7 @@ h3 {
 .occasion-grid p,
 .meaning-list p,
 .split p,
-.seo-copy p,
+.content-copy p,
 .qa-list p,
 .footer p {
   color: var(--muted);
@@ -480,14 +480,14 @@ h3 {
   gap: 14px;
 }
 
-.seo-copy {
+.content-copy {
   padding-top: 0;
 }
 
-.seo-copy h3,
-.seo-copy h4,
-.seo-copy h5,
-.seo-copy h6 {
+.content-copy h3,
+.content-copy h4,
+.content-copy h5,
+.content-copy h6 {
   max-width: 850px;
   margin: 22px 0 10px;
   font-family: Georgia, "Times New Roman", serif;
@@ -495,25 +495,25 @@ h3 {
   letter-spacing: 0;
 }
 
-.seo-copy h3 {
+.content-copy h3 {
   font-size: clamp(1.9rem, 3vw, 3rem);
   line-height: 1.08;
 }
 
-.seo-copy h4 {
+.content-copy h4 {
   font-size: 1.65rem;
 }
 
-.seo-copy h5 {
+.content-copy h5 {
   font-size: 1.25rem;
 }
 
-.seo-copy h6 {
+.content-copy h6 {
   font-size: 1rem;
   text-transform: uppercase;
 }
 
-.seo-copy p,
+.content-copy p,
 .copy-block p {
   max-width: 880px;
   font-size: 1.03rem;
